@@ -22,7 +22,7 @@ func (ep *EngineParams) Parse(rawParams resourcetypes.RawParams) error {
 	return mapstructure.Decode(rawParams, ep)
 }
 
-func (ep *EngineParams) Count() int64 {
+func (ep *EngineParams) Bandwidth() int64 {
 	return ep.Average
 }
 

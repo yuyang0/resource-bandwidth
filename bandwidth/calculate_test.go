@@ -113,9 +113,9 @@ func TestCalculateRealloc(t *testing.T) {
 	d, err := cm.CalculateRealloc(ctx, node, nil, nil)
 	assert.Nil(t, err)
 	eParams, wResource, dResource := parse(d)
-	assert.Equal(t, eParams.Count(), int64(0))
-	assert.Equal(t, wResource.Count(), int64(0))
-	assert.Equal(t, dResource.Count(), int64(0))
+	assert.Equal(t, eParams.Bandwidth(), int64(0))
+	assert.Equal(t, wResource.Bandwidth, int64(0))
+	assert.Equal(t, dResource.Bandwidth, int64(0))
 	// 2. empty request
 	origin = plugintypes.WorkloadResource{
 		"bandwidth": 10,
@@ -173,7 +173,7 @@ func TestCalculateRealloc(t *testing.T) {
 
 	assert.Equal(t, eParams.Average, int64(0))
 	assert.Equal(t, wResource.Bandwidth, int64(0))
-	assert.Equal(t, dResource.Count(), int64(-30))
+	assert.Equal(t, dResource.Bandwidth, int64(-30))
 }
 
 func TestCalculateRemap(t *testing.T) {

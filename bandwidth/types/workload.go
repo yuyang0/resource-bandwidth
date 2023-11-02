@@ -45,11 +45,6 @@ func (w *WorkloadResource) Sub(w1 *WorkloadResource) {
 	w.Bandwidth -= w1.Bandwidth
 }
 
-// Count
-func (w *WorkloadResource) Count() int64 {
-	return w.Bandwidth
-}
-
 // WorkloadResourceRaw includes all possible fields passed by eru-core for editing workload
 // for request calculation
 type WorkloadResourceRequest struct {
@@ -80,8 +75,4 @@ func (w *WorkloadResourceRequest) DeepCopy() *WorkloadResourceRequest {
 	return &WorkloadResourceRequest{
 		Bandwidth: w.Bandwidth,
 	}
-}
-
-func (w *WorkloadResourceRequest) Count() int64 {
-	return w.Bandwidth
 }

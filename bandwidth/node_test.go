@@ -203,21 +203,25 @@ func TestSetNodeResourceCapacity(t *testing.T) {
 	_, v = parse(r)
 	assert.Equal(t, v.Bandwidth, int64(100))
 
+	// INC
 	r, err = cm.SetNodeResourceCapacity(ctx, node, nodeResourceRequest, nil, true, true)
 	assert.Nil(t, err)
 	_, v = parse(r)
 	assert.Equal(t, v.Bandwidth, int64(110))
 
+	// DEC
 	r, err = cm.SetNodeResourceCapacity(ctx, node, nodeResourceRequest, nil, true, false)
 	assert.Nil(t, err)
 	_, v = parse(r)
 	assert.Equal(t, v.Bandwidth, int64(100))
 
+	// INC
 	r, err = cm.SetNodeResourceCapacity(ctx, node, nil, nodeResource, true, true)
 	assert.Nil(t, err)
 	_, v = parse(r)
 	assert.Equal(t, v.Bandwidth, int64(110))
 
+	// DEC
 	r, err = cm.SetNodeResourceCapacity(ctx, node, nodeResource, nil, true, false)
 	assert.Nil(t, err)
 	_, v = parse(r)
@@ -322,6 +326,15 @@ func TestSetNodeResourceInfo(t *testing.T) {
 	}
 	_, err = cm.SetNodeResourceInfo(ctx, "node-2", rcv, ucv)
 	assert.Nil(t, err)
+
+	r, err = cm.GetNodeResourceInfo(ctx, "node-2", nil)
+	assert.Nil(t, err)
+	err = capacity.Parse(r.Capacity)
+	assert.Nil(t, err)
+	err = usage.Parse(r.Usage)
+	assert.Nil(t, err)
+	assert.Equal(t, capacity.Bandwidth, int64(30))
+	assert.Equal(t, usage.Bandwidth, int64(40))
 }
 
 func TestSetNodeResourceUsage(t *testing.T) {

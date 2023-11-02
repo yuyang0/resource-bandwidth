@@ -255,8 +255,8 @@ func (p Plugin) GetMostIdleNode(ctx context.Context, nodenames []string) (*plugi
 
 	for nodename, nodeResourceInfo := range nodesResourceInfo {
 		var idle float64
-		if nodeResourceInfo.CapCount() > 0 {
-			idle = float64(nodeResourceInfo.UsageCount()) / float64(nodeResourceInfo.CapCount())
+		if nodeResourceInfo.CapBandwidth() > 0 {
+			idle = float64(nodeResourceInfo.UsageBandwidth()) / float64(nodeResourceInfo.CapBandwidth())
 		}
 
 		if idle < minIdle {
@@ -314,8 +314,8 @@ func (p Plugin) getNodeResourceInfo(ctx context.Context, nodename string, worklo
 
 	diffs := []string{}
 
-	if actuallyWorkloadsUsage.Count() != nodeResourceInfo.UsageCount() {
-		diffs = append(diffs, fmt.Sprintf("node.BandwidthUsed != sum(workload.BandwidthRequest): %.2d != %.2d", nodeResourceInfo.UsageCount(), actuallyWorkloadsUsage.Count()))
+	if actuallyWorkloadsUsage.Bandwidth != nodeResourceInfo.UsageBandwidth() {
+		diffs = append(diffs, fmt.Sprintf("node.BandwidthUsed != sum(workload.BandwidthRequest): %.2d != %.2d", nodeResourceInfo.UsageBandwidth(), actuallyWorkloadsUsage.Bandwidth))
 	}
 
 	return nodeResourceInfo, actuallyWorkloadsUsage, diffs, nil
@@ -391,9 +391,9 @@ func (p Plugin) doGetNodeDeployCapacity(nodeResourceInfo *bdtypes.NodeResourceIn
 	} else {
 		capacityInfo.Capacity = int(availableResource.Bandwidth / req.Bandwidth)
 	}
-	if nodeResourceInfo.CapCount() > 0 {
-		capacityInfo.Usage = float64(nodeResourceInfo.UsageCount()) / float64(nodeResourceInfo.CapCount())
-		capacityInfo.Rate = float64(req.Count()) / float64(nodeResourceInfo.CapCount())
+	if nodeResourceInfo.CapBandwidth() > 0 {
+		capacityInfo.Usage = float64(nodeResourceInfo.UsageBandwidth()) / float64(nodeResourceInfo.CapBandwidth())
+		capacityInfo.Rate = float64(req.Bandwidth) / float64(nodeResourceInfo.CapBandwidth())
 	}
 	return capacityInfo
 }

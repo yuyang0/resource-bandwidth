@@ -58,11 +58,11 @@ type NodeResourceInfo struct {
 	Usage    *NodeResource `json:"usage"`
 }
 
-func (n *NodeResourceInfo) CapCount() int64 {
+func (n *NodeResourceInfo) CapBandwidth() int64 {
 	return n.Capacity.Bandwidth
 }
 
-func (n *NodeResourceInfo) UsageCount() int64 {
+func (n *NodeResourceInfo) UsageBandwidth() int64 {
 	return n.Usage.Bandwidth
 }
 
@@ -102,10 +102,6 @@ func (n *NodeResourceRequest) Validate() error {
 		return ErrInvalidBandwidth
 	}
 	return nil
-}
-
-func (n *NodeResourceRequest) Count() int64 {
-	return n.Bandwidth
 }
 
 // Merge fields to NodeResourceRequest.

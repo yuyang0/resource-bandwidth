@@ -379,17 +379,10 @@ func (p Plugin) doSetNodeResourceInfo(ctx context.Context, nodename string, reso
 }
 
 func (p Plugin) doGetNodeDeployCapacity(nodeResourceInfo *bdtypes.NodeResourceInfo, req *bdtypes.WorkloadResourceRequest) *plugintypes.NodeDeployCapacity {
-	availableResource := nodeResourceInfo.GetAvailableResource()
-
+	// bandwidth oversale is allowed, so just return the max capacity
 	capacityInfo := &plugintypes.NodeDeployCapacity{
 		Weight:   1, // TODO why 1?
 		Capacity: maxCapacity,
-	}
-	if req.Bandwidth == 0 { //nolint
-		// if count equals to 0, then assign a big value to capacity
-		capacityInfo.Capacity = maxCapacity
-	} else {
-		capacityInfo.Capacity = int(availableResource.Bandwidth / req.Bandwidth)
 	}
 	if nodeResourceInfo.CapBandwidth() > 0 {
 		capacityInfo.Usage = float64(nodeResourceInfo.UsageBandwidth()) / float64(nodeResourceInfo.CapBandwidth())

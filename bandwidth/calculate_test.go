@@ -66,9 +66,11 @@ func TestCalculateDeploy(t *testing.T) {
 	eParams, wResources = parse(d)
 	assert.Len(t, eParams, 10)
 
-	// don't have enough resource
-	d, err = cm.CalculateDeploy(ctx, node, 11, req)
-	assert.Error(t, err)
+	// bigger than capacity
+	d, err = cm.CalculateDeploy(ctx, node, 100, req)
+	assert.Nil(t, err)
+	eParams, wResources = parse(d)
+	assert.Len(t, eParams, 100)
 }
 
 func TestCalculateRealloc(t *testing.T) {

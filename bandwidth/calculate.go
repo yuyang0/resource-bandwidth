@@ -6,7 +6,6 @@ import (
 	"github.com/projecteru2/core/log"
 	plugintypes "github.com/projecteru2/core/resource/plugins/types"
 	resourcetypes "github.com/projecteru2/core/resource/types"
-	coretypes "github.com/projecteru2/core/types"
 	bdtypes "github.com/yuyang0/resource-bandwidth/bandwidth/types"
 )
 
@@ -120,18 +119,11 @@ func (p Plugin) CalculateRemap(context.Context, string, map[string]plugintypes.W
 	}, nil
 }
 
-func (p Plugin) doAlloc(resourceInfo *bdtypes.NodeResourceInfo, deployCount int, req *bdtypes.WorkloadResourceRequest) ([]*bdtypes.EngineParams, []*bdtypes.WorkloadResource, error) {
+func (p Plugin) doAlloc(_ *bdtypes.NodeResourceInfo, deployCount int, req *bdtypes.WorkloadResourceRequest) ([]*bdtypes.EngineParams, []*bdtypes.WorkloadResource, error) { //nolint
 	enginesParams := []*bdtypes.EngineParams{}
 	workloadsResource := []*bdtypes.WorkloadResource{}
-	var err error
 
-	availableResource := resourceInfo.GetAvailableResource()
 	for i := 0; i < deployCount; i++ {
-		if availableResource.Bandwidth < req.Bandwidth {
-			err = coretypes.ErrInsufficientResource
-			break
-		}
-		availableResource.Bandwidth -= req.Bandwidth
 		workloadsResource = append(workloadsResource, &bdtypes.WorkloadResource{
 			Bandwidth: req.Bandwidth,
 		})
@@ -140,5 +132,5 @@ func (p Plugin) doAlloc(resourceInfo *bdtypes.NodeResourceInfo, deployCount int,
 			Peak:    req.Bandwidth * 2,
 		})
 	}
-	return enginesParams, workloadsResource, err
+	return enginesParams, workloadsResource, nil
 }
